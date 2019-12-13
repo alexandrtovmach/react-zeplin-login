@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Header, Label, Icon, Segment, Select, Form } from 'semantic-ui-react';
+import { Container, Header, Label, Icon, Segment, Select, Radio, Form } from 'semantic-ui-react';
 
 import config from "./config";
 import ZeplinLogin from "../../dist";
@@ -8,13 +8,17 @@ export default class ExaplePage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-		const { consumerKey, consumerSecret, themeOptions } = config;    
+		const { clientId, clientSecret, themeOptions, customClassName } = config;    
     this.state = {
-      consumerKey,
-      consumerSecret,
-      callbackUrl: config.callbackUrl || window.location.href,
-			customClassName: config.customClassName,
-      buttonTheme: themeOptions[0].value
+      clientId,
+      clientSecret,
+			customClassName,
+      redirectUri: window.location.href,
+      buttonTheme: themeOptions[0].value,
+      withUserData: true,
+      customButton: false,
+      forceRedirectStrategy: false,
+      debug: true
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -33,7 +37,7 @@ export default class ExaplePage extends React.Component {
   };
 
   render() {
-    const { consumerKey, consumerSecret, buttonTheme, customClassName, callbackUrl } = this.state;
+    const { clientId, clientSecret, buttonTheme, customClassName, redirectUri } = this.state;
     return (
       <div className="viewport">
         <Segment basic>
@@ -54,27 +58,27 @@ export default class ExaplePage extends React.Component {
             <Segment>
               <Form>
                 <Form.Field>
-                  <label>Consumer Key</label>
+                  <label>Client ID</label>
                   <input
-                    onChange={e => this.handleChange(e.target.value, "consumerKey")}
-                    placeholder={config.consumerKey}
-                    value={consumerKey}
+                    onChange={e => this.handleChange(e.target.value, "clientId")}
+                    placeholder={config.clientId}
+                    value={clientId}
                   />
                 </Form.Field>
                 <Form.Field>
-                  <label>Consumer Secret</label>
+                  <label>Client Secret</label>
                   <input
-                    onChange={e => this.handleChange(e.target.value, "consumerSecret")}
-                    placeholder={config.consumerSecret}
-                    value={consumerSecret}
+                    onChange={e => this.handleChange(e.target.value, "clientSecret")}
+                    placeholder={config.clientSecret}
+                    value={clientSecret}
                   />
                 </Form.Field>
                 <Form.Field>
                   <label>Redirect URI</label>
                   <input
-                    onChange={e => this.handleChange(e.target.value, "callbackUrl")}
+                    onChange={e => this.handleChange(e.target.value, "redirectUri")}
                     placeholder='https://example.com'
-                    value={callbackUrl}
+                    value={redirectUri}
                   />
                 </Form.Field>
                 <Form.Field>
@@ -83,7 +87,7 @@ export default class ExaplePage extends React.Component {
                     onChange={(e, data) => this.handleChange(data.value, "buttonTheme")}
                     labeled
                     label="Button theme"
-                    placeholder='Select your country'
+                    placeholder='Select theme'
                     options={config.themeOptions}
                     defaultValue={buttonTheme}
                   />
@@ -115,12 +119,12 @@ export default class ExaplePage extends React.Component {
             <Segment>
               <ZeplinLogin
                 // debug={debug}
-                consumerKey={consumerKey}
-                consumerSecret={consumerSecret}
+                clientId={clientId}
+                clientSecret={clientSecret}
                 authCallback={this.loginHandler}
                 buttonTheme={buttonTheme}
                 className={customClassName}
-                callbackUrl={callbackUrl}
+                redirectUri={redirectUri}
 							/>
             </Segment>
           </Container>

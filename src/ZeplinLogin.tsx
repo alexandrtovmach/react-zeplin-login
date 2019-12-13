@@ -3,10 +3,6 @@ import * as React from "react";
 import { ZeplinLoginProps, ZeplinLoginState } from "..";
 import ZeplinLoginButton from "./ZeplinLoginButton";
 import { openWindow, observeWindow } from "./services/window";
-import {
-  obtainOauthRequestToken,
-  obtainOauthAccessToken
-} from "./services/oauth1";
 
 export default class ZeplinLoginComponent extends React.Component<
   ZeplinLoginProps,
@@ -26,76 +22,66 @@ export default class ZeplinLoginComponent extends React.Component<
 
   initializeProcess = () => {
     if (window.opener) {
-      const [, oauthToken, oauthVerifier] =
-        window.location.search.match(
-          /^(?=.*oauth_token=([^&]+)|)(?=.*oauth_verifier=([^&]+)|).+$/
-        ) || [];
+      const [match, code] =
+        window.location.search.match(/.*code=([^&|\n|\t\s]+)/) || [];
       window.opener.postMessage(
         {
-          type: "authorized",
-          data: {
-            oauthToken,
-            oauthVerifier
-          }
+          type: "code",
+          data: code
         },
         window.origin
       );
     } else {
-      const { authCallback, consumerKey, consumerSecret } = this.props;
-      window.onmessage = async ({ data: { type, data } }: any) => {
-        if (type === "authorized") {
-          const accessTokenData = await obtainOauthAccessToken({
-            apiUrl: "https://api.zeplin.com/oauth/access_token",
-            consumerKey,
-            consumerSecret,
-            oauthToken: data.oauthToken,
-            oauthVerifier: data.oauthVerifier,
-            method: "POST"
-          });
-          const { popup } = this.state;
-          this.setState(
-            {
-              isCompleted: true
-            },
-            () => {
-              authCallback && authCallback(undefined, accessTokenData);
-              popup && popup.close();
-            }
-          );
+      const { authCallback } = this.props;
+      window.onmessage = ({ data: { type, data } }: any) => {
+        if (type === "code") {
+          this.sendTokenRequest(data)
+            .then(res => res.json())
+            .then(data => {
+              const { popup } = this.state;
+              this.setState(
+                {
+                  isCompleted: true
+                },
+                () => {
+                  authCallback && authCallback(undefined, data);
+                  popup && popup.close();
+                }
+              );
+            });
         }
       };
     }
   };
 
-  handleLoginClick = async () => {
-    const { consumerKey, consumerSecret, callbackUrl } = this.props;
-    const url = callbackUrl || window.location.href;
-    const obtainRequestTokenConfig = {
-      apiUrl: "https://api.zeplin.com/oauth/request_token",
-      callbackUrl: url,
-      consumerKey,
-      consumerSecret,
-      method: "POST"
-    };
-    const requestTokenData = await obtainOauthRequestToken(
-      obtainRequestTokenConfig
-    );
-    if (requestTokenData.oauth_callback_confirmed === "true") {
-      const popup = openWindow({
-        url: `https://api.zeplin.com/oauth/authorize?oauth_token=${requestTokenData.oauth_token}`,
-        name: "Log in with Zeplin"
-      });
+  buildCodeRequestURL = () => {
+    const { clientId, redirectUri } = this.props;
+    const uri = encodeURIComponent(redirectUri || window.location.href);
+    return `https://www.zeplin.com/oauth?client_id=${clientId}&redirect_uri=${uri}&state=null&response_type=code`;
+  };
 
-      if (popup) {
-        observeWindow({ popup, onClose: this.handleClosingPopup });
-        this.setState({
-          popup
-        });
+  sendTokenRequest = (code: string) => {
+    const { clientId, clientSecret, redirectUri } = this.props;
+    const uri = encodeURIComponent(redirectUri || window.location.href);
+    return fetch(
+      `https://www.zeplin.com/api/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${uri}&code=${code}&grant_type=authorization_code`,
+      {
+        method: "POST"
       }
-    } else {
-      this.handleError(
-        `Callback URL "${url}" is not confirmed. Please check that is whitelisted within the Zeplin app settings.`
-      );
+    );
+  };
+
+  handleLoginClick = () => {
+    const popup = openWindow({
+      url: this.buildCodeRequestURL(),
+      name: "Log in with Zeplin"
+    });
+
+    if (popup) {
+      observeWindow({ popup, onClose: this.handleClosingPopup });
+      this.setState({
+        popup
+      });
     }
   };
 
@@ -105,11 +91,6 @@ export default class ZeplinLoginComponent extends React.Component<
     if (!isCompleted) {
       authCallback && authCallback("User closed OAuth popup");
     }
-  };
-
-  handleError = (message: string) => {
-    const { authCallback } = this.props;
-    authCallback(message);
   };
 
   render() {

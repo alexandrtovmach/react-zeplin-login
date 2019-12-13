@@ -8,7 +8,7 @@ React component for a simple OAuth login with Zeplin.
 
 [DEMO HERE](https://alexandrtovmach.github.io/react-zeplin-login/)
 
-![image](https://user-images.githubusercontent.com/28801003/70518342-dc895280-1b42-11ea-905a-eed1bdf63694.png)
+![image](https://user-images.githubusercontent.com/28801003/70469597-ff2f5300-1ad1-11ea-880f-2d604d9ed41b.png)
 
 ## 🚀 Get Started
 
@@ -38,26 +38,26 @@ Follow these steps to start using React Zeplin Login:
      return (
        <ZeplinLogin
          authCallback={authHandler}
-         consumerKey={CONSUMER_KEY}
-         consumerSecret={CONSUMER_SECRET}
-         callbackUrl={CALLBACK_URL}
+         clientId={CLIENT_ID}
+         clientSecret={CLIENT_SECRET}
+         redirectUri={REDIRECT_URI}
        />
      );
    };
    ```
 
-3. Find more info about keys and Zeplin developer apps in [official docs](https://developer.zeplin.com/en/docs/basics/apps/overview).
+3. Find more info about keys and OAuth apps in [Zeplin official docs](https://www.zeplin.com/developers/api#oauth2)
 
 ## 📖 API
 
-| Property       | Type                                                       | Default   | Description                                                                                                          |
-| -------------- | ---------------------------------------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------- |
-| authCallback   | function                                                   | required  | Callback function which takes two arguments `(error, authData)`                                                      |
-| consumerKey    | string                                                     | required  | Consumer API Key of your Zeplin developer app (not Access Token)                                                     |
-| consumerSecret | string                                                     | required  | Consumer API Secret of your Zeplin developer app (not Access Token Secret)                                           |
-| callbackUrl    | string                                                     | required  | Whitelisted [callback URL](https://developer.zeplin.com/en/docs/basics/apps/guides/callback-urls) of your Zeplin app |
-| buttonTheme    | enum(`"light"`, `"light_short"`, `"dark"`, `"dark_short"`) | `"light"` | Button style theme, that based on [Zeplin Brand Design](https://about.zeplin.com/en_us/company/brand-resources.html) |
-| className      | string                                                     | `""`      | Custom class name                                                                                                    |
+| Property     | Type                                                       | Default   | Description                                                            |
+| ------------ | ---------------------------------------------------------- | --------- | ---------------------------------------------------------------------- |
+| authCallback | function                                                   | required  | Callback function which takes two arguments `(error, authData)`        |
+| clientId     | string                                                     | required  | Client ID of your OAuth App                                            |
+| clientSecret | string                                                     | required  | Client Secret of your OAuth App                                        |
+| redirectUri  | string                                                     | required  | Authorization callback URL of your OAuth App                           |
+| buttonTheme  | enum(`"light"`, `"light_short"`, `"dark"`, `"dark_short"`) | `"light"` | Button style theme that based on Zeplin styles                          |
+| className    | string                                                     | `""`      | Custom class name                                                      |
 
 ## 📝 License
 

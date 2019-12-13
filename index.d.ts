@@ -4,14 +4,14 @@ type ZeplinLoginButtonTheme = "dark_short" | "light_short" | "dark" | "light";
 
 interface ZeplinLoginProps {
   /**
-   * Consumer API key
+   * Application (client) ID
    */
-  consumerKey: string;
+  clientId: string;
 
   /**
-   * Consumer API secret key
+   * Application (client) ID
    */
-  consumerSecret: string;
+  clientSecret: string;
 
   /**
    * Callback function which takes two arguments (error, authData)
@@ -21,7 +21,7 @@ interface ZeplinLoginProps {
   /**
    * The redirect URI of the application, this should be same as the value in the application registration portal.
    */
-  callbackUrl: string;
+  redirectUri: string;
 
   /**
    * Name of theme for button style.

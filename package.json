@@ -75,9 +75,5 @@
   "homepage": "https://alexandrtovmach.github.io/react-zeplin-login",
   "repository": {
     "url": "https://github.com/alexandrtovmach/react-zeplin-login"
-  },
-  "dependencies": {
-    "@types/crypto-js": "^3.1.43",
-    "crypto-js": "^3.1.9-1"
   }
 }
