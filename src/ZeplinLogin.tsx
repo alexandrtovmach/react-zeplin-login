@@ -57,16 +57,26 @@ export default class ZeplinLoginComponent extends React.Component<
   buildCodeRequestURL = () => {
     const { clientId, redirectUri } = this.props;
     const uri = encodeURIComponent(redirectUri || window.location.href);
-    return `https://www.zeplin.com/oauth?client_id=${clientId}&redirect_uri=${uri}&state=null&response_type=code`;
+    return `https://api.zeplin.dev/v1/oauth/authorize?client_id=${clientId}&redirect_uri=${uri}&response_type=code`;
   };
 
   sendTokenRequest = (code: string) => {
     const { clientId, clientSecret, redirectUri } = this.props;
-    const uri = encodeURIComponent(redirectUri || window.location.href);
+    const uri = redirectUri || window.location.href;
     return fetch(
-      `https://www.zeplin.com/api/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${uri}&code=${code}&grant_type=authorization_code`,
+      "https://cors-anywhere.herokuapp.com/https://api.zeplin.dev/v1/oauth/token",
       {
-        method: "POST"
+        method: "POST",
+        body: JSON.stringify({
+          client_id: clientId,
+          client_secret: clientSecret,
+          redirect_uri: uri,
+          code,
+          grant_type: "authorization_code"
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
       }
     );
   };
@@ -99,7 +109,7 @@ export default class ZeplinLoginComponent extends React.Component<
     return (
       <>
         <ZeplinLoginButton
-          buttonTheme={buttonTheme || "light"}
+          buttonTheme={buttonTheme || "classic"}
           buttonClassName={className}
           onClick={this.handleLoginClick}
         />

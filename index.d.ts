@@ -1,6 +1,6 @@
 import * as React from "react";
 
-type ZeplinLoginButtonTheme = "dark_short" | "light_short" | "dark" | "light";
+type ZeplinLoginButtonTheme = "dark_short" | "light_short" | "dark" | "light" | "classic";
 
 interface ZeplinLoginProps {
   /**
@@ -27,11 +27,6 @@ interface ZeplinLoginProps {
    * Name of theme for button style.
    */
   buttonTheme?: ZeplinLoginButtonTheme;
-
-  // /**
-  //  * Enable detailed logs of authorization process.
-  //  */
-  // debug?: boolean;
 
   /**
    * Additional class name string.

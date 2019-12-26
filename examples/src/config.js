@@ -4,6 +4,11 @@ export default {
   customClassName: "my-custom-class",
   themeOptions: [
     {
+      key: "classic",
+      value: "classic",
+      text: "classic"
+    },
+    {
       key: "dark",
       value: "dark",
       text: "dark"

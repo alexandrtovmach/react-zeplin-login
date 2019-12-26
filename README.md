@@ -8,7 +8,7 @@ React component for a simple OAuth login with Zeplin.
 
 [DEMO HERE](https://alexandrtovmach.github.io/react-zeplin-login/)
 
-![image](https://user-images.githubusercontent.com/28801003/70469597-ff2f5300-1ad1-11ea-880f-2d604d9ed41b.png)
+![button examples](https://user-images.githubusercontent.com/28801003/71491334-c82ea080-2838-11ea-862d-96529b907bec.png)
 
 ## 🚀 Get Started
 
@@ -46,18 +46,18 @@ Follow these steps to start using React Zeplin Login:
    };
    ```
 
-3. Find more info about keys and OAuth apps in [Zeplin official docs](https://www.zeplin.com/developers/api#oauth2)
+3. Find more info about keys and OAuth apps in [Zeplin official docs](https://docs.zeplin.dev/reference#authentication)
 
 ## 📖 API
 
-| Property     | Type                                                       | Default   | Description                                                            |
-| ------------ | ---------------------------------------------------------- | --------- | ---------------------------------------------------------------------- |
-| authCallback | function                                                   | required  | Callback function which takes two arguments `(error, authData)`        |
-| clientId     | string                                                     | required  | Client ID of your OAuth App                                            |
-| clientSecret | string                                                     | required  | Client Secret of your OAuth App                                        |
-| redirectUri  | string                                                     | required  | Authorization callback URL of your OAuth App                           |
-| buttonTheme  | enum(`"light"`, `"light_short"`, `"dark"`, `"dark_short"`) | `"light"` | Button style theme that based on Zeplin styles                          |
-| className    | string                                                     | `""`      | Custom class name                                                      |
+| Property     | Type                                                                    | Default     | Description                                                                                               |
+| ------------ | ----------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
+| authCallback | function                                                                | required    | Callback function which takes two arguments `(error, authData)`                                           |
+| clientId     | string                                                                  | required    | Client ID of your OAuth App                                                                               |
+| clientSecret | string                                                                  | required    | Client Secret of your OAuth App                                                                           |
+| redirectUri  | string                                                                  | required    | Authorization callback URL of your OAuth App                                                              |
+| buttonTheme  | enum(`"classic"`, `"light"`, `"light_short"`, `"dark"`, `"dark_short"`) | `"classic"` | Button style theme. Just `"classic"` is approved by Zeplin team, and de-facto is only one official option |
+| className    | string                                                                  | `""`        | Custom class name                                                                                         |
 
 ## 📝 License
 
